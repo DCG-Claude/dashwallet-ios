@@ -82,6 +82,17 @@ final class TransactionDirectionTests: XCTestCase {
         XCTAssertEqual(makeTransaction(directionRaw: 0, netAmount: 100).defaultTaxCategory, .transferIn)
     }
 
+    func testReclassifyInfoNamesTheRealDefaultTaxCategories() {
+        // The "Reclassify Your Transactions" explainer must describe the
+        // defaults an unclassified sent/received transaction actually gets.
+        let sent = makeTransaction(directionRaw: 1, netAmount: -110, fee: 10)
+        let received = makeTransaction(directionRaw: 0, netAmount: 100)
+        XCTAssertEqual(TxReclassifyTransactionsInfoViewController.outgoingDefaultTaxCategory, sent.defaultTaxCategory)
+        XCTAssertEqual(TxReclassifyTransactionsInfoViewController.incomingDefaultTaxCategory, received.defaultTaxCategory)
+        XCTAssertEqual(TxReclassifyTransactionsInfoViewController.outgoingDefaultTaxCategory.nextTaxCategory, .expense)
+        XCTAssertEqual(TxReclassifyTransactionsInfoViewController.incomingDefaultTaxCategory.nextTaxCategory, .income)
+    }
+
     private func makeTransaction(
         directionRaw: UInt32,
         netAmount: Int64,

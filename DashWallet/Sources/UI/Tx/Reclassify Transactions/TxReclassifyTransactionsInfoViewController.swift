@@ -98,6 +98,11 @@ class TxReclassifyTransactionsInfoViewController: BasePageSheetViewController {
         }
     }
 
+    /// The explainer names the same fallbacks the app applies to unclassified
+    /// transactions, so it can't drift from `TransactionDirection.defaultTaxCategory`.
+    static var outgoingDefaultTaxCategory: TxMetadataTaxCategory { TransactionDirection.sent.defaultTaxCategory }
+    static var incomingDefaultTaxCategory: TxMetadataTaxCategory { TransactionDirection.received.defaultTaxCategory }
+
     private func configureHierarchy() {
         titleLabel.text = NSLocalizedString("Reclassify Your Transactions", comment: "Reclassify transactions info screen")
         subtitleLabel.text = NSLocalizedString("These classifications will be reflected on the CSV export that can be used for import into tax reporting services.",
@@ -107,17 +112,17 @@ class TxReclassifyTransactionsInfoViewController: BasePageSheetViewController {
         outgoingTransactionsTitleLabel.text = NSLocalizedString("Outgoing transactions", comment: "Reclassify transactions info screen")
         outgoingTransactionsSubtitle1Label.text = NSLocalizedString("by default will be marked as",
                                                                     comment: "Reclassify info: sentence start; a tag with the default category follows it")
-        outgoingTransactionsSubtitle1TagLabel.text = NSLocalizedString("Expense", comment: "Reclassify transactions info: tax category tag label")
+        outgoingTransactionsSubtitle1TagLabel.text = Self.outgoingDefaultTaxCategory.stringValue
         outgoingTransactionsSubtitle2Label.text = NSLocalizedString("You can change it to",
                                                                     comment: "Reclassify info: sentence start; a tag with the category to pick follows it")
-        outgoingTransactionsSubtitle2TagLabel.text = TxMetadataTaxCategory.transferOut.stringValue
+        outgoingTransactionsSubtitle2TagLabel.text = Self.outgoingDefaultTaxCategory.nextTaxCategory.stringValue
         incomingTransactionsTitleLabel.text = NSLocalizedString("Incoming transactions", comment: "Reclassify transactions info screen")
         incomingTransactionsSubtitle1Label.text = NSLocalizedString("by default will be marked as",
                                                                     comment: "Reclassify info: sentence start; a tag with the default category follows it")
-        incomingTransactionsSubtitle1TagLabel.text = NSLocalizedString("Expense", comment: "Reclassify transactions info: tax category tag label")
+        incomingTransactionsSubtitle1TagLabel.text = Self.incomingDefaultTaxCategory.stringValue
         incomingTransactionsSubtitle2Label.text = NSLocalizedString("You can change it to",
                                                                     comment: "Reclassify info: sentence start; a tag with the category to pick follows it")
-        incomingTransactionsSubtitle2TagLabel.text = TxMetadataTaxCategory.transferIn.stringValue
+        incomingTransactionsSubtitle2TagLabel.text = Self.incomingDefaultTaxCategory.nextTaxCategory.stringValue
         linkedAccountsTitleLabel.text = NSLocalizedString("Linked accounts", comment: "Reclassify transactions info screen")
         linkedAccountsSubtitleLabel.text = NSLocalizedString("by default all transactions to or from your linked accounts (exchanges, staking, etc) will be marked as a transfer.",
                                                              comment: "Reclassify transactions info screen")
