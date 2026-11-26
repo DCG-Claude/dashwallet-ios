@@ -82,6 +82,22 @@ final class TransactionDirectionTests: XCTestCase {
         XCTAssertEqual(makeTransaction(directionRaw: 0, netAmount: 100).defaultTaxCategory, .transferIn)
     }
 
+    func testReclassifyInfoSheetTagsMatchDefaultTaxCategories() {
+        let vc = TxReclassifyTransactionsInfoViewController.controller()
+        vc.transaction = makeTransaction(directionRaw: 0, netAmount: 100)
+        vc.loadViewIfNeeded()
+
+        let sentDefault = TransactionDirection.sent.defaultTaxCategory
+        let receivedDefault = TransactionDirection.received.defaultTaxCategory
+
+        XCTAssertEqual(vc.outgoingTransactionsSubtitle1TagLabel.text, sentDefault.stringValue)
+        XCTAssertEqual(vc.outgoingTransactionsSubtitle2TagLabel.text, sentDefault.nextTaxCategory.stringValue)
+        XCTAssertEqual(vc.incomingTransactionsSubtitle1TagLabel.text, receivedDefault.stringValue)
+        XCTAssertEqual(vc.incomingTransactionsSubtitle2TagLabel.text, receivedDefault.nextTaxCategory.stringValue)
+        XCTAssertNotEqual(vc.outgoingTransactionsSubtitle1TagLabel.text, vc.outgoingTransactionsSubtitle2TagLabel.text)
+        XCTAssertNotEqual(vc.incomingTransactionsSubtitle1TagLabel.text, vc.incomingTransactionsSubtitle2TagLabel.text)
+    }
+
     private func makeTransaction(
         directionRaw: UInt32,
         netAmount: Int64,
@@ -107,7 +123,7 @@ final class TransactionDirectionTests: XCTestCase {
     ) {
         XCTAssertEqual(
             direction.title,
-            NSLocalizedString(titleKey, comment: ""),
+            String(localized: String.LocalizationValue(titleKey)),
             file: file,
             line: line)
         XCTAssertEqual(direction.directionSymbol, symbol, file: file, line: line)
