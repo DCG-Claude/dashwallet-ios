@@ -107,17 +107,21 @@ class TxReclassifyTransactionsInfoViewController: BasePageSheetViewController {
         outgoingTransactionsTitleLabel.text = String(localized: "Outgoing transactions", comment: "Reclassify transactions info screen")
         outgoingTransactionsSubtitle1Label.text = String(localized: "by default will be marked as",
                                                                     comment: "Reclassify info: sentence start; a tag with the default category follows it")
-        outgoingTransactionsSubtitle1TagLabel.text = String(localized: "Expense", comment: "Reclassify transactions info: tax category tag label")
+        // Tags follow the real fallback mapping so the sheet matches what the
+        // transaction details screen and the CSV export show.
+        let outgoingDefault = TransactionDirection.sent.defaultTaxCategory
+        outgoingTransactionsSubtitle1TagLabel.text = outgoingDefault.stringValue
         outgoingTransactionsSubtitle2Label.text = String(localized: "You can change it to",
                                                                     comment: "Reclassify info: sentence start; a tag with the category to pick follows it")
-        outgoingTransactionsSubtitle2TagLabel.text = TxMetadataTaxCategory.transferOut.stringValue
+        outgoingTransactionsSubtitle2TagLabel.text = outgoingDefault.nextTaxCategory.stringValue
         incomingTransactionsTitleLabel.text = String(localized: "Incoming transactions", comment: "Reclassify transactions info screen")
         incomingTransactionsSubtitle1Label.text = String(localized: "by default will be marked as",
                                                                     comment: "Reclassify info: sentence start; a tag with the default category follows it")
-        incomingTransactionsSubtitle1TagLabel.text = String(localized: "Expense", comment: "Reclassify transactions info: tax category tag label")
+        let incomingDefault = TransactionDirection.received.defaultTaxCategory
+        incomingTransactionsSubtitle1TagLabel.text = incomingDefault.stringValue
         incomingTransactionsSubtitle2Label.text = String(localized: "You can change it to",
                                                                     comment: "Reclassify info: sentence start; a tag with the category to pick follows it")
-        incomingTransactionsSubtitle2TagLabel.text = TxMetadataTaxCategory.transferIn.stringValue
+        incomingTransactionsSubtitle2TagLabel.text = incomingDefault.nextTaxCategory.stringValue
         linkedAccountsTitleLabel.text = String(localized: "Linked accounts", comment: "Reclassify transactions info screen")
         linkedAccountsSubtitleLabel.text = String(localized: "by default all transactions to or from your linked accounts (exchanges, staking, etc) will be marked as a transfer.",
                                                              comment: "Reclassify transactions info screen")
